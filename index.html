@@ -102,14 +102,42 @@
       <a class="hotspot hotspot--music" href="https://open.spotify.com/playlist/1xDzF5f8LDnGjXEqvfTuYl" target="_blank" rel="noopener noreferrer" aria-label="Sugerir canción en la playlist de Spotify">SUGERIR CANCIÓN</a>
     </section>
 
-    <!-- 8. Regalos (tocar la perla abre los datos) -->
+    <!-- 8. Un poquito de mí -->
+    <section class="gallery" data-petalos aria-labelledby="gallery-title">
+      <div class="gallery__inner">
+        <h2 id="gallery-title" class="gallery__title">Un poquito de mí</h2>
+        <div class="divider" aria-hidden="true"><span></span></div>
+        <div class="gallery__grid">
+          <button class="polaroid" type="button" aria-label="Ver foto 1 de 6">
+            <img src="assets/fotos/camila-02.jpg" alt="Camila con vestido negro y anteojos de corazón, caminando por un camino de álamos" width="1079" height="1609" loading="lazy" decoding="async" style="object-position: 50% 35%">
+          </button>
+          <button class="polaroid" type="button" aria-label="Ver foto 2 de 6">
+            <img src="assets/fotos/camila-05.jpg" alt="Camila abrazando a su perrito blanco, en blanco y negro" width="1080" height="1517" loading="lazy" decoding="async" style="object-position: 50% 30%">
+          </button>
+          <button class="polaroid" type="button" aria-label="Ver foto 3 de 6">
+            <img src="assets/fotos/camila-03.jpg" alt="Camila sonriendo, agachada jugando con su perrito bajo un árbol" width="1080" height="1603" loading="lazy" decoding="async" style="object-position: 50% 45%">
+          </button>
+          <button class="polaroid" type="button" aria-label="Ver foto 4 de 6">
+            <img src="assets/fotos/camila-01.jpg" alt="Camila caminando con anteojos de corazón y botas, en blanco y negro" width="1051" height="1590" loading="lazy" decoding="async" style="object-position: 50% 20%">
+          </button>
+          <button class="polaroid" type="button" aria-label="Ver foto 5 de 6">
+            <img src="assets/fotos/camila-04.jpg" alt="Camila con pollera blanca y botas, bajo una pérgola con flores" width="1079" height="1600" loading="lazy" decoding="async" style="object-position: 50% 25%">
+          </button>
+          <button class="polaroid" type="button" aria-label="Ver foto 6 de 6">
+            <img src="assets/fotos/camila-06.jpg" alt="Camila con bengalas de humo en un camino, en blanco y negro" width="1080" height="1557" loading="lazy" decoding="async" style="object-position: 50% 35%">
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. Regalos (tocar la perla abre los datos) -->
     <section class="panel panel--gifts" data-petalos aria-label="Regalos">
       <img src="assets/08-regalos.jpg" alt="Regalos. Tu presencia es mi mejor regalo, pero si estás pensando en hacerme un presente, acá te dejo mis datos. Tocá la perla." width="941" height="1672" loading="lazy" decoding="async">
       <span class="pearl-glow" aria-hidden="true"></span>
       <button class="hotspot hotspot--envelope" type="button" data-open-gifts aria-label="Tocá la perla para ver los datos para transferencia"></button>
     </section>
 
-    <!-- 9. Bloomkeep -->
+    <!-- 10. Bloomkeep -->
     <section class="panel panel--camera" aria-label="Bloomkeep" style="aspect-ratio: 992 / 1586">
       <img src="assets/09-bloomkeep.jpg" alt="Bloomkeep. Guardá los recuerdos de esta noche. Compartí tus fotos y videos de la fiesta." width="992" height="1586" loading="lazy" decoding="async">
       <span class="flash-light" aria-hidden="true"></span>
@@ -117,14 +145,14 @@
       <a class="hotspot hotspot--bloomkeep" href="https://app.bloomkeep.site/camila-15" target="_blank" rel="noopener noreferrer" aria-label="Subir recuerdos a Bloomkeep">SUBIR RECUERDOS</a>
     </section>
 
-    <!-- 10. Confirmación -->
+    <!-- 11. Confirmación -->
     <section class="panel panel--rsvp" data-petalos aria-label="Confirmá tu asistencia">
       <img src="assets/10-confirmacion.jpg" alt="Confirmá tu asistencia. Tu presencia hará esta noche aún más especial. Confirmá antes del 19 de diciembre de 2026." width="941" height="1672" loading="lazy" decoding="async">
       <a id="boton-confirmar" class="hotspot hotspot--rsvp" target="_blank" rel="noopener noreferrer" aria-label="Confirmar asistencia a los XV de Camila">CONFIRMAR ASISTENCIA</a>
     </section>
   </main>
 
-  <!-- 11. Footer -->
+  <!-- 12. Footer -->
   <footer class="footer">
     <img src="assets/11-footer.jpg" alt="Hecho con amor por BloomDate" width="2172" height="724" loading="lazy" decoding="async">
     <a class="hotspot footer__link footer__link--wa" href="https://wa.me/5491140436324" target="_blank" rel="noopener noreferrer" aria-label="Escribir a BloomDate por WhatsApp"></a>
@@ -155,8 +183,17 @@
     </div>
   </dialog>
 
+  <!-- Visor de fotos -->
+  <dialog class="lightbox" aria-label="Fotos de Camila">
+    <button class="lightbox__close" type="button" data-close-lightbox aria-label="Cerrar">&times;</button>
+    <button class="lightbox__nav lightbox__nav--prev" type="button" data-prev-photo aria-label="Foto anterior">&#8249;</button>
+    <figure class="lightbox__frame"><img class="lightbox__img" src="assets/fotos/camila-02.jpg" alt=""></figure>
+    <button class="lightbox__nav lightbox__nav--next" type="button" data-next-photo aria-label="Foto siguiente">&#8250;</button>
+  </dialog>
+
   <script src="script.js"></script>
   <script src="scratch.js"></script>
+  <script src="galeria.js"></script>
   <script src="petalos.js"></script>
   <script src="invitation-personalization.js"></script>
 </body>
