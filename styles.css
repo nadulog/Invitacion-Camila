@@ -1,0 +1,627 @@
+*, *::before, *::after { box-sizing: border-box; }
+
+:root {
+  --ink: #2e4763;        /* azul marino de los títulos de las piezas */
+  --ink-soft: #4d6582;
+  --sky: #a9c1e4;
+  --cream: #f3ece4;
+}
+
+html { background: var(--cream); -webkit-text-size-adjust: 100%; }
+
+/* La tarjeta no se corre de costado al hacer scroll en el celular */
+html { overflow-x: hidden; }
+@supports (overflow: clip) { html, body { overflow-x: clip; } }
+html, body { overscroll-behavior-x: none; }
+body { touch-action: pan-y pinch-zoom; }
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(70% 50% at 20% 10%, rgba(190, 210, 240, .45), transparent 70%),
+    radial-gradient(60% 45% at 85% 90%, rgba(176, 200, 236, .45), transparent 70%),
+    linear-gradient(to bottom, #f5efe8, #e9e4de);
+  background-attachment: fixed;
+  color: var(--ink);
+  font-family: "Cormorant Garamond", Georgia, serif;
+}
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* ---------- Columna de la invitación ---------- */
+.invitation, .footer {
+  --col: min(100vw, 480px);
+  width: var(--col);
+  margin: 0 auto;
+}
+.invitation { --blend: calc(var(--col) * .09); box-shadow: 0 0 60px rgba(46, 71, 99, .16); }
+
+.panel {
+  position: relative;
+  aspect-ratio: 941 / 1672;
+  container-type: inline-size;
+  line-height: 0;
+  isolation: isolate;
+  overflow: hidden;
+}
+.panel > img:first-child { display: block; width: 100%; height: 100%; }
+
+/* Fundido suave entre piezas */
+.panel + .panel {
+  margin-top: calc(var(--blend) * -1);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, rgba(0, 0, 0, .35) calc(var(--blend) * .4), rgba(0, 0, 0, .85) calc(var(--blend) * .75), #000 var(--blend));
+          mask-image: linear-gradient(to bottom, transparent 0, rgba(0, 0, 0, .35) calc(var(--blend) * .4), rgba(0, 0, 0, .85) calc(var(--blend) * .75), #000 var(--blend));
+}
+
+/* Portada: zoom lento tipo cine */
+.panel--cover > img:first-child { transform-origin: 50% 35%; animation: cover-zoom 14s ease-out both; }
+body.intro-open .panel--cover > img:first-child { animation-play-state: paused; }
+@keyframes cover-zoom { from { transform: scale(1.08); } to { transform: scale(1); } }
+
+/* Footer */
+.footer { position: relative; container-type: inline-size; line-height: 0; margin-top: calc(var(--col) * -0.06); }
+.footer img {
+  display: block; width: 100%; height: auto;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 22%);
+          mask-image: linear-gradient(to bottom, transparent 0, #000 22%);
+}
+
+/* ---------- Botones invisibles sobre la imagen ---------- */
+.hotspot {
+  position: absolute;
+  display: block;
+  color: transparent;
+  font-size: 0;
+  border-radius: 999px;
+  z-index: 3;
+  cursor: pointer;
+  -webkit-tap-highlight-color: rgba(46, 71, 99, .15);
+}
+button.hotspot { background: transparent; border: 0; padding: 0; }
+.hotspot:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+.hotspot--calendar  { left: 10.3%; width: 62.5%; top: 72.3%; height: 5%;   border-radius: 2px; }
+.hotspot--location  { left: 29.3%; width: 47.7%; top: 47.4%; height: 4.7%; }
+.hotspot--music     { left: 19.1%; width: 61.8%; top: 40.5%; height: 6.3%; border-radius: 3cqi; }
+.hotspot--phone     { left: 66%;   width: 29%;   top: 62%;   height: 30%;  border-radius: 6cqi; }
+.hotspot--envelope  { left: 3%;    width: 94%;   top: 46.5%; height: 34.2%; border-radius: 1cqi; }
+.hotspot--bloomkeep { left: 21.1%; width: 57.8%; top: 32.6%; height: 6.7%; border-radius: 3cqi; }
+.hotspot--rsvp      { left: 18.3%; width: 65.1%; top: 64.5%; height: 6%; }
+
+/* brillo suave que invita a tocar los botones */
+.hotspot--calendar::after,
+.hotspot--location::after,
+.hotspot--music::after,
+.hotspot--bloomkeep::after,
+.hotspot--rsvp::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, .6) 50%, transparent 65%) no-repeat;
+  background-size: 250% 100%;
+  animation: shine 3.6s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes shine {
+  0%, 55% { background-position: 130% 0; }
+  100%    { background-position: -30% 0; }
+}
+
+/* Footer: íconos de la imagen (2172×724) */
+.footer__link { top: 35.8%; height: 22%; width: 7.3%; border-radius: 50%; }
+.footer__link--wa  { left: 34.4%; }
+.footer__link--ig  { left: 46.4%; }
+.footer__link--web { left: 58.3%; }
+
+/* ---------- Invitados: nombres y cantidad sobre la pieza ---------- */
+.guests__content {
+  position: absolute;
+  left: 9%;
+  right: 9%;
+  top: 38.5%;
+  bottom: 43%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.guests__names {
+  margin: 0;
+  font-weight: 500;
+  font-size: 8.4cqi;
+  line-height: 1.25;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-wrap: balance;
+}
+/* número en el hueco de "Tenés ___ lugares reservados" (x 326 / singular 360, y 1018 de 941×1672) */
+.guest-places {
+  position: absolute;
+  left: 34.64%;
+  top: 60.85%;
+  margin: 0;
+  transform: translate(-50%, -50%);
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-weight: 600;
+  font-size: 8.4cqi;
+  line-height: 1;
+  color: var(--ink);
+  font-variant-numeric: lining-nums;
+}
+.guest-places--singular { left: 38.26%; }
+
+/* Separador: línea – perla – línea */
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 62%;
+  margin: 3.5cqi auto;
+}
+.divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: linear-gradient(to right, transparent, #7f95b2); }
+.divider::after { background: linear-gradient(to left, transparent, #7f95b2); }
+.divider span {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff, #eef1f6 45%, #c3cad6);
+  box-shadow: 0 1px 2px rgba(46, 71, 99, .3);
+}
+
+/* ---------- Cuenta regresiva: números sobre la pieza limpia ---------- */
+.countdown { position: absolute; inset: 0; pointer-events: none; }
+.countdown strong {
+  position: absolute;
+  top: 50.96%;
+  width: 22%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-weight: 500;
+  font-size: 15.4cqi;
+  line-height: 1;
+  color: var(--ink);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.countdown [data-unit="days"]    { left: 15.14%; }
+.countdown [data-unit="hours"]   { left: 38.63%; }
+.countdown [data-unit="minutes"] { left: 62.01%; }
+.countdown [data-unit="seconds"] { left: 85.39%; }
+
+/* ---------- Música: el celular "late" y suben notas mientras suena ---------- */
+.phone-glow {
+  position: absolute;
+  left: 68%;
+  top: 63.5%;
+  width: 26%;
+  height: 27.5%;
+  z-index: 1;
+  border-radius: 5cqi;
+  pointer-events: none;
+  background: radial-gradient(60% 40% at 50% 47%, rgba(169, 193, 228, .55), transparent 75%);
+  mix-blend-mode: multiply;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+.panel--music.is-playing .phone-glow { animation: phone-pulse 1.6s ease-in-out infinite; opacity: 1; }
+@keyframes phone-pulse { 0%, 100% { transform: scale(.92); opacity: .45; } 50% { transform: scale(1.04); opacity: 1; } }
+
+.notes { position: absolute; inset: 0; pointer-events: none; z-index: 2; }
+.notes i {
+  position: absolute;
+  top: 66%;
+  font: normal 6cqi/1 Georgia, serif;
+  color: #fff;
+  text-shadow: 0 0 1.5cqi rgba(46, 71, 99, .55);
+  opacity: 0;
+}
+.notes i:nth-child(1) { left: 20%; }
+.notes i:nth-child(2) { left: 32%; font-size: 7cqi; }
+.notes i:nth-child(3) { left: 46%; }
+.notes i:nth-child(4) { left: 27%; font-size: 5cqi; }
+.notes i:nth-child(5) { left: 74%; font-size: 7cqi; }
+.notes i:nth-child(6) { left: 84%; font-size: 5cqi; }
+.panel--music.is-playing .notes i { animation: note-up 5.4s ease-out infinite; }
+.panel--music.is-playing .notes i:nth-child(2) { animation-delay: .9s; }
+.panel--music.is-playing .notes i:nth-child(3) { animation-delay: 1.8s; }
+.panel--music.is-playing .notes i:nth-child(4) { animation-delay: 2.7s; }
+.panel--music.is-playing .notes i:nth-child(5) { animation-delay: 3.6s; }
+.panel--music.is-playing .notes i:nth-child(6) { animation-delay: 4.5s; }
+@keyframes note-up {
+  0%   { opacity: 0; transform: translate(0, 0) rotate(-8deg) scale(.7); }
+  15%  { opacity: .95; }
+  70%  { opacity: .7; }
+  100% { opacity: 0; transform: translate(4cqi, -22cqi) rotate(10deg) scale(1.1); }
+}
+@media (prefers-reduced-motion: reduce) { .notes, .phone-glow { display: none; } }
+
+/* ---------- Regalos: la perla del sobre brilla ---------- */
+.pearl-glow {
+  position: absolute;
+  left: 49.95%;
+  top: 67%;
+  z-index: 2;
+  width: 24cqi;
+  aspect-ratio: 1;
+  margin: -12cqi 0 0 -12cqi;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(255, 255, 255, .85), rgba(200, 220, 250, .45) 40%, transparent 70%);
+  mix-blend-mode: screen;
+  animation: pearl 2.8s ease-in-out infinite;
+}
+@keyframes pearl {
+  0%, 100% { opacity: .15; transform: scale(.75); }
+  50%      { opacity: 1;   transform: scale(1.08); }
+}
+.panel--gifts .hotspot--envelope:active ~ .pearl-glow,
+.panel--gifts:has(.hotspot--envelope:active) .pearl-glow { opacity: 1; }
+
+/* ---------- Bloomkeep: el flash de la cámara (x 318, y 960 de 992×1586) ---------- */
+.panel--camera { --fx: 32.1%; --fy: 60.5%; }
+.flash-light {
+  position: absolute; inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(circle at var(--fx) var(--fy),
+    rgba(255, 255, 255, .98) 0, rgba(250, 252, 255, .85) 3cqi, rgba(230, 240, 255, .45) 12cqi,
+    rgba(230, 240, 255, .18) 32cqi, rgba(230, 240, 255, 0) 60cqi);
+  mix-blend-mode: screen;
+  opacity: 0;
+}
+.flash-star {
+  position: absolute;
+  left: var(--fx); top: var(--fy);
+  z-index: 2;
+  width: 34cqi; height: 34cqi;
+  margin: -17cqi 0 0 -17cqi;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, transparent 0, rgba(255, 255, 255, .95) 50%, transparent 100%) center / 100% 1.6% no-repeat,
+    linear-gradient(0deg,  transparent 0, rgba(255, 255, 255, .95) 50%, transparent 100%) center / 1.6% 100% no-repeat,
+    radial-gradient(circle, #fff 0 6%, rgba(235, 244, 255, .7) 12%, transparent 30%);
+  opacity: 0;
+  transform: scale(.2);
+}
+.panel--camera.is-shooting .flash-light { animation: flash-light 1.4s ease-out; }
+.panel--camera.is-shooting .flash-star { animation: flash-star 1.4s ease-out; }
+@keyframes flash-light {
+  0%   { opacity: 0; }
+  6%   { opacity: .55; }
+  12%  { opacity: 0; }
+  24%  { opacity: 0; }
+  28%  { opacity: 1; }
+  45%  { opacity: .55; }
+  100% { opacity: 0; }
+}
+@keyframes flash-star {
+  0%, 24% { opacity: 0; transform: scale(.2) rotate(0deg); }
+  30%     { opacity: 1; transform: scale(1) rotate(20deg); }
+  100%    { opacity: 0; transform: scale(.5) rotate(45deg); }
+}
+
+/* ---------- Modal con diseño en imagen ---------- */
+.img-modal {
+  width: min(100vw, calc(100svh * 941 / 1672), 480px);
+  max-width: none;
+  max-height: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: visible;
+  line-height: 0;
+}
+.img-modal::backdrop {
+  background: rgba(60, 82, 112, .55);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+.img-modal__stage { position: relative; width: 100%; container-type: inline-size; }
+.img-modal__stage > img {
+  display: block; width: 100%; height: 100%;
+  -webkit-mask-image: radial-gradient(75% 60% at 50% 50%, #000 82%, transparent 100%);
+          mask-image: radial-gradient(75% 60% at 50% 50%, #000 82%, transparent 100%);
+}
+.img-modal__hit {
+  position: absolute;
+  display: block;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: rgba(46, 71, 99, .15);
+}
+.img-modal__hit:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.img-modal__hit--btn { border-radius: 4cqi; overflow: hidden; }
+.img-modal__hit--btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, .7) 50%, transparent 65%) no-repeat;
+  background-size: 250% 100%;
+  animation: shine 3.6s ease-in-out infinite;
+}
+
+/* La tarjeta cae con rebote desde la perla del sobre */
+.gift-modal[open] { animation: gift-drop .7s cubic-bezier(.3, 1.5, .5, 1); }
+@keyframes gift-drop {
+  0%   { opacity: 0; transform: translateY(40px) scale(.9); }
+  60%  { opacity: 1; }
+  100% { transform: none; }
+}
+
+.toast {
+  position: absolute;
+  left: 50%;
+  top: 82%;
+  transform: translateX(-50%);
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+  font: 500 15px/1.2 "Cormorant Garamond", serif;
+  letter-spacing: .06em;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity .25s;
+  pointer-events: none;
+}
+.toast.is-visible { opacity: 1; }
+
+/* Ráfaga de brillitos */
+.spark {
+  position: absolute;
+  z-index: 5;
+  width: calc(2.6cqi * var(--s, 1));
+  aspect-ratio: 1;
+  margin: calc(-1.3cqi * var(--s, 1)) 0 0 calc(-1.3cqi * var(--s, 1));
+  pointer-events: none;
+  background: #fff;
+  clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+  filter: drop-shadow(0 0 .8cqi rgba(255, 255, 255, .95));
+  opacity: 0;
+  animation: spark 1.2s ease-out forwards;
+}
+.spark--pearl {
+  clip-path: none;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff, #eef1f6 45%, #b7c7de);
+  width: calc(1.8cqi * var(--s, 1));
+  margin: calc(-.9cqi * var(--s, 1)) 0 0 calc(-.9cqi * var(--s, 1));
+}
+@keyframes spark {
+  0%   { opacity: 0; transform: translate(0, 0) scale(.3) rotate(0deg); }
+  15%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(1) rotate(120deg); }
+}
+
+/* =========================================================
+   Intro, música, pétalos, apariciones
+   ========================================================= */
+body.intro-open { overflow: hidden; }
+
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(90% 70% at 50% 40%, #f7f2ec, #dfe6f0);
+  line-height: 1.2;
+  transition: opacity .8s ease .2s, visibility 0s linear 1s;
+}
+.intro.is-leaving { opacity: 0; visibility: hidden; }
+.intro.is-leaving .intro__card { transform: scale(1.06); }
+.intro.is-gone { display: none; }
+
+.intro__card {
+  container-type: inline-size;
+  position: relative;
+  --card-w: min(100vw, calc(100dvh * 941 / 1672), 480px);
+  width: var(--card-w);
+  aspect-ratio: 941 / 1672;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--card-w) * .1) calc(var(--card-w) * .13) 0;
+  text-align: center;
+  background: url("assets/intro-fondo.jpg") center / cover no-repeat;
+  box-shadow: 0 20px 60px rgba(46, 71, 99, .22);
+  color: var(--ink);
+  transition: transform 1s ease;
+  animation: intro-in 1.1s ease-out both;
+}
+@keyframes intro-in { from { opacity: 0; transform: translateY(16px); } }
+.intro__eyebrow { margin: 0; font-weight: 500; font-size: 4.6cqi; letter-spacing: .42em; color: var(--ink-soft); }
+.intro__name {
+  margin: 1cqi 0 0;
+  font-family: "Pinyon Script", cursive;
+  font-weight: 400;
+  font-size: 23cqi;
+  line-height: 1.2;
+}
+.intro__date { margin: 0; font-weight: 500; font-size: 5cqi; letter-spacing: .25em; color: var(--ink-soft); font-variant-numeric: lining-nums; }
+.intro__question { margin: 10cqi 0 4cqi; font-style: italic; font-weight: 500; font-size: 5.6cqi; }
+.intro__actions { display: grid; gap: 3cqi; width: 100%; }
+.intro__btn {
+  min-height: 48px;
+  padding: 0 12px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .55);
+  color: var(--ink);
+  font: 600 clamp(13px, 3.9cqi, 17px)/1 "Cormorant Garamond", serif;
+  letter-spacing: .16em;
+  cursor: pointer;
+  transition: background .2s, color .2s;
+}
+.intro__btn--music { background: var(--ink); color: #fff; }
+.intro__btn:active { background: #20354d; color: #fff; }
+.intro__btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+/* Pétalos (petalos.js) */
+.falling-petals {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 50;
+  pointer-events: none;
+}
+
+/* Botón de música */
+.audio-toggle {
+  position: fixed;
+  right: max(14px, env(safe-area-inset-right));
+  bottom: max(14px, env(safe-area-inset-bottom));
+  z-index: 60;
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, .85);
+  border-radius: 50%;
+  background: rgba(46, 71, 99, .88);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(46, 71, 99, .3);
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .4s;
+}
+body:not(.intro-open) .audio-toggle { opacity: 1; pointer-events: auto; }
+.audio-toggle__note { font-size: 20px; line-height: 1; }
+.audio-toggle__bars { display: none; gap: 3px; align-items: flex-end; height: 18px; }
+.audio-toggle__bars i { width: 3px; height: 100%; background: #fff; border-radius: 2px; transform-origin: bottom; animation: bar 1s ease-in-out infinite; }
+.audio-toggle__bars i:nth-child(2) { animation-delay: -.35s; }
+.audio-toggle__bars i:nth-child(3) { animation-delay: -.7s; }
+@keyframes bar { 0%, 100% { transform: scaleY(.3); } 50% { transform: scaleY(1); } }
+.audio-toggle.is-playing .audio-toggle__bars { display: flex; }
+.audio-toggle.is-playing .audio-toggle__note { display: none; }
+
+/* Aparición suave de nombres y números */
+.js-reveal .guests__content,
+.js-reveal .guest-places,
+.js-reveal .countdown {
+  opacity: 0;
+  transition: opacity 1.1s ease;
+}
+.js-reveal .is-revealed .guests__content,
+.js-reveal .is-revealed .guest-places,
+.js-reveal .is-revealed .countdown { opacity: 1; }
+.countdown strong.flick { animation: flick .5s ease-out; }
+@keyframes flick { from { opacity: .35; transform: translate(-50%, calc(-50% - 3px)); } }
+
+/* ---------- Raspadita de la fecha ---------- */
+.scratch {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  transition: opacity .9s ease, visibility 0s linear .9s;
+}
+.scratch__canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  cursor: grab;
+}
+.scratch.is-revealed { opacity: 0; visibility: hidden; pointer-events: none; }
+
+/* No se puede seguir bajando hasta descubrir la fecha */
+body.date-locked .panel--date ~ *,
+body.date-locked .footer { display: none; }
+
+.confetti {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 90;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro__card, .countdown strong.flick, .img-modal[open], .gift-modal[open],
+  .panel--cover > img:first-child, .pearl-glow, .spark,
+  .flash-light, .flash-star { animation: none !important; }
+  .hotspot::after, .img-modal__hit--btn::after { animation: none !important; }
+}
+
+/* ---------- Música: la onda del celular se mueve ----------
+   La onda impresa se borró de 07-musica.jpg (_tool/build_assets.py); acá se dibuja encima,
+   inclinada como el celular (barras de x 672 a 837, centro y 1258 de 941×1672). */
+.synth {
+  position: absolute;
+  left: 71%;
+  width: 18.8%;
+  top: 71.53%;
+  height: 7.42%;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 .4cqi;
+  transform: skewX(-9.7deg);
+  pointer-events: none;
+}
+.synth i {
+  display: block;
+  width: .34cqi;
+  min-width: 1.5px;
+  height: var(--h);
+  border-radius: 1cqi;
+  background: linear-gradient(to bottom, #b4c6d8, #a5bbd1 50%, #b4c6d8);
+  transform-origin: 50% 50%;
+  animation: synth-idle calc(var(--t) * .8) ease-in-out var(--d) infinite alternate;
+}
+.synth i:nth-child(-n+3) { opacity: .55; }
+.synth i:nth-child(4) { opacity: .8; }
+.panel--music.is-playing .synth i { animation: synth-play calc(var(--t) * .42) ease-in-out var(--d) infinite alternate; }
+@keyframes synth-idle {
+  0%   { transform: scaleY(.4); }
+  50%  { transform: scaleY(1.1); }
+  100% { transform: scaleY(.7); }
+}
+@keyframes synth-play {
+  0%   { transform: scaleY(.25); }
+  35%  { transform: scaleY(1.2); }
+  65%  { transform: scaleY(.6); }
+  100% { transform: scaleY(1.05); }
+}
+
+/* Auriculares (capa recortada, _tool/hp_layer.py, x 74 y 852 de 941×1672): laten con la música */
+.headphones {
+  position: absolute;
+  left: 7.864%;
+  top: 50.957%;
+  width: 57.067%;
+  height: auto;
+  z-index: 1;
+  pointer-events: none;
+  transform-origin: 50% 96%;
+  animation: hp-idle 1.4s ease-in-out infinite;
+}
+.panel--music.is-playing .headphones { animation: hp-beat .5s cubic-bezier(.2, .7, .3, 1) infinite; }
+@keyframes hp-idle {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50%      { transform: scale(1.022) rotate(-.6deg); }
+}
+@keyframes hp-beat {
+  0%   { transform: scale(1) rotate(0deg); }
+  18%  { transform: scale(1.045) rotate(-.9deg); }
+  60%  { transform: scale(1.012) rotate(.3deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+@media (prefers-reduced-motion: reduce) { .synth i, .headphones { animation: none !important; } }
